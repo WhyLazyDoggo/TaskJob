@@ -5,8 +5,17 @@
     "title": "Thêm dịch vụ",
     "priority": "High",
     "deadline": "",
-    "status": "todo",
+    "status": "checking",
     "created": "10:50:34 27/7/2026"
+  },
+  {
+    "id": 10,
+    "code": "TASK010",
+    "title": "Thêm \"Đơn tổng\" cho nhập khách mua lẻ nhanh gọn nhẹ",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "16:05:33 27/7/2026"
   },
   {
     "id": 5,
