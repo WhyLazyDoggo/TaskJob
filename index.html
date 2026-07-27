@@ -1,401 +1,138 @@
 <!DOCTYPE html>
-<html lang="vi"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Checklist V2</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#222;--line:#ddd;--accent:#2563eb}
-body.dark{--bg:#111827;--card:#1f2937;--text:#f3f4f6;--line:#374151;--accent:#60a5fa}
-body{margin:0;font-family:Segoe UI,Arial;background:var(--bg);color:var(--text)}
-.wrap{max-width:1200px;margin:auto;padding:24px}
-.top{display:grid;grid-template-columns:1fr 140px 160px 120px 120px;gap:8px}
-input,select,button{padding:10px;border:1px solid var(--line);border-radius:8px}
-button{cursor:pointer;background:var(--accent);color:#fff}
-.stats{display:flex;gap:12px;margin:16px 0}
-.card{background:var(--card);padding:12px;border-radius:10px;border:1px solid var(--line);flex:1}
-.progress{height:10px;background:#d1d5db;border-radius:99px;overflow:hidden}
-.bar{height:100%;width:0;background:#22c55e}
-table{width:100%;border-collapse:collapse;background:var(--card)}
-th,td{border:1px solid var(--line);padding:8px;vertical-align:middle}
-tr.dragging{opacity:.5}
-.handle{cursor:grab;text-align:center;font-size:20px;width:36px}
-.badge{border-left:6px solid #999;border-radius:8px;padding:10px;min-height:72px}
-.todo{background:#eee}
-.checking{background:#fff5bf;border-color:#eab308}
-.done{background:#dcfce7;border-color:#16a34a;text-decoration:line-through}
-.small{font-size:12px;opacity:.7}
-textarea{width:100%;height:180px;margin-top:10px;display:none}
-.toolbar2{display:flex;justify-content:space-between;margin:12px 0}
-</style>
-<style>.--savior-overlay-transform-reset {
-  transform: none !important;
-}
-.--savior-overlay-z-index-top {
-  z-index: 2147483643 !important;
-}
-.--savior-overlay-position-relative {
-  position: relative;
-}
-.--savior-overlay-position-static {
-  position: static !important;
-}
-.--savior-overlay-overflow-hidden {
-  overflow: hidden !important;
-}
-.--savior-overlay-overflow-x-visible {
-  overflow-x: visible !important;
-}
-.--savior-overlay-overflow-y-visible {
-  overflow-y: visible !important;
-}
-.--savior-overlay-z-index-reset {
-  z-index: auto !important;
-}
-.--savior-overlay-display-none {
-  display: none !important;
-}
-.--savior-overlay-clearfix {
-  clear: both;
-}
-.--savior-overlay-reset-filter {
-  filter: none !important;
-  backdrop-filter: none !important;
-}
-.--savior-tooltip-host {
-  z-index: 9999;
-  position: absolute;
-  top: 0;
-}
-/*Override css styles for Twitch.tv*/
-main.--savior-overlay-z-index-reset {
-  z-index: auto !important;
-}
-.modal__backdrop.--savior-overlay-z-index-reset {
-  position: static !important;
-}
-main.--savior-overlay-z-index-top {
-  z-index: auto !important;
-}
-main.--savior-overlay-z-index-top .channel-root__player-container + div,
-main.--savior-overlay-z-index-top .video-player-hosting-ui__container + div {
-  opacity: 0.1;
-}
-/*Dirty hack for facebook big video page e.g: https://www.facebook.com/abc/videos/...*/
-.--savior-backdrop {
-  position: fixed !important;
-  z-index: 2147483642 !important;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw !important;
-  background-color: rgba(0,0,0,0.9);
-}
-.--savior-overlay-twitter-video-player {
-  position: fixed;
-  width: 80%;
-  height: 80%;
-  top: 10%;
-  left: 10%;
-}
-.--savior-overlay-z-index-reset [class*="DivSideNavContainer"],
-.--savior-overlay-z-index-reset [class*="DivHeaderContainer"],
-.--savior-overlay-z-index-reset [class*="DivBottomContainer"],
-.--savior-overlay-z-index-reset [class*="DivCategoryListWrapper"],
-.--savior-overlay-z-index-reset [data-testid="sidebarColumn"],
-.--savior-overlay-z-index-reset header[role="banner"],
-.--savior-overlay-z-index-reset [data-testid="cellInnerDiv"]:not(.--savior-overlay-z-index-reset),
-.--savior-overlay-z-index-reset [aria-label="Home timeline"]>div:first-child,
-.--savior-overlay-z-index-reset [aria-label="Home timeline"]>div:nth-child(3) {
-  z-index: -1 !important;
-}
-.--savior-overlay-z-index-reset [data-testid="cellInnerDiv"] .--savior-backdrop+div {
-  z-index: 2147483643 !important;
-}
-.--savior-overlay-z-index-reset [data-testid="primaryColumn"]>[aria-label="Home timeline"] {
-  z-index: 0 !important;
-}
-.--savior-overlay-z-index-reset#mtLayer,
-.--savior-overlay-z-index-reset.media-layer {
-  z-index: 3000 !important;
-}
-.--savior-overlay-position-relative [class*="SecBar_secBar_"],
-.--savior-overlay-position-relative .woo-box-flex [class*="Frame_top_"] {
-  z-index: 0 !important;
-}
-.--savior-overlay-position-relative .vue-recycle-scroller__item-view:not(.--savior-overlay-z-index-reset),
-.--savior-overlay-position-relative .woo-panel-main[class*="BackTop_main_"],
-.--savior-overlay-position-relative [class*="Main_side_"] {
-  z-index: -1 !important;
-}
-/* Fix conflict css with zingmp3 */
-.zm-video-modal.--savior-overlay-z-index-reset {
-  position: absolute;
-}
-/* Dirty hack for xvideos99 */
-#page #main.--savior-overlay-z-index-reset {
-  z-index: auto !important;
-}
-/* Overlay for ok.ru */
-#vp_w.--savior-overlay-z-index-reset.media-layer.media-layer__video {
-  overflow-y: hidden;
-  z-index: 2147483643 !important;
-}
-/* Fix missing controller for tv.naver.com */
-.--savior-overlay-z-index-top.rmc_controller,
-.--savior-overlay-z-index-top.rmc_setting_intro,
-.--savior-overlay-z-index-top.rmc_highlight,
-.--savior-overlay-z-index-top.rmc_control_settings {
-  z-index: 2147483644 !important;
-}
-/* Dirty hack for douyi.com */
-.swiper-wrapper.--savior-overlay-z-index-reset .swiper-slide:not(.swiper-slide-active),
-.swiper-wrapper.--savior-overlay-transform-reset .swiper-slide:not(.swiper-slide-active) {
-  display: none;
-}
-.videoWrap + div > div {
-  pointer-events: unset;
-}
-/* Dirty hack for fpt.ai */
-.mfp-wrap.--savior-overlay-z-index-top {
-  position: relative;
-}
-.mfp-wrap.--savior-overlay-z-index-top .mfp-close {
-  display: none;
-}
-.mfp-wrap.--savior-overlay-z-index-top .mfp-content {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-section.--savior-overlay-z-index-reset>main[role="main"].--savior-overlay-z-index-reset + nav {
-  z-index: -1 !important;
-}
-section.--savior-overlay-z-index-reset>main[role="main"].--savior-overlay-z-index-reset section.--savior-overlay-z-index-reset div.--savior-overlay-z-index-reset ~ div {
-  position: relative;
-}
-.watching-movie #video-player.--savior-overlay-z-index-top {
-  z-index: 2147483644 !important;
-}
-div[class^="tiktok"].--savior-overlay-z-index-reset {
-  z-index: 2147483644 !important;
-}
-.--savior-lightoff-fix section:not(:has([class*="--savior-overlay-"])),
-.--savior-lightoff-fix section.section_video ~ section {
-  z-index: -1;
-  position: relative;
-}
-.--savior-lightoff-fix header,
-.--savior-lightoff-fix footer,
-.--savior-lightoff-fix .top-header,
-.--savior-lightoff-fix .swiper-container,
-.--savior-lightoff-fix #to_top,
-.--savior-lightoff-fix #button-adblock {
-  z-index: -1 !important;
-}
-@-moz-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-o-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-</style></head>
-<body class="">
-<div class="wrap">
-<h2>Daily Checklist V2</h2>
-<div class="top">
-<input id="title" placeholder="Nhập task">
-<select id="priority"><option>Low</option><option>Medium</option><option>High</option></select>
-<input id="deadline" type="date">
-<button onclick="addTask()">Thêm</button>
-<button onclick="toggleTheme()">🌙</button>
-</div>
-<div class="toolbar2">
-<input id="search" placeholder="Tìm kiếm..." oninput="render()" style="max-width:260px">
-<button onclick="exportData()">Xuất HTML</button>
-</div>
-<div class="stats">
-<div class="card">Total <b id="stTotal">6</b></div>
-<div class="card">Todo <b id="stTodo">6</b></div>
-<div class="card">Checking <b id="stChecking">0</b></div>
-<div class="card">Done <b id="stDone">0</b></div>
-</div>
-<div class="progress"><div class="bar" id="bar" style="width: 0%;"></div></div>
-<table>
-<thead><tr><th></th><th>Tasks</th><th>Code</th><th>Priority</th><th>Check</th><th>Finish</th><th>Xóa</th></tr></thead>
-<tbody id="tb"><tr draggable="true" data-id="1"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Thêm dịch vụ</b><div>todo</div><div class="small">10:50:34 27/7/2026</div></div></td>
-  <td>TASK001</td><td>High</td>
-  <td><button onclick="setStatus(1,'checking')">✓</button></td>
-  <td><button onclick="setStatus(1,'done')">✔</button></td>
-  <td><button onclick="del(1)">🗑</button></td></tr><tr draggable="true" data-id="5"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Resize + allign giữa màn hình cái window promt lúc in hóa đơn</b><div>todo</div><div class="small">10:51:12 27/7/2026</div></div></td>
-  <td>TASK005</td><td>Low</td>
-  <td><button onclick="setStatus(5,'checking')">✓</button></td>
-  <td><button onclick="setStatus(5,'done')">✔</button></td>
-  <td><button onclick="del(5)">🗑</button></td></tr><tr draggable="true" data-id="6"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Thêm phần chiết khấu + thuế phí cho đơn nhập</b><div>todo</div><div class="small">10:51:17 27/7/2026</div></div></td>
-  <td>TASK006</td><td>Low</td>
-  <td><button onclick="setStatus(6,'checking')">✓</button></td>
-  <td><button onclick="setStatus(6,'done')">✔</button></td>
-  <td><button onclick="del(6)">🗑</button></td></tr><tr draggable="true" data-id="7"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Thêm login nhân viên</b><div>todo</div><div class="small">10:51:23 27/7/2026</div></div></td>
-  <td>TASK007</td><td>Low</td>
-  <td><button onclick="setStatus(7,'checking')">✓</button></td>
-  <td><button onclick="setStatus(7,'done')">✔</button></td>
-  <td><button onclick="del(7)">🗑</button></td></tr><tr draggable="true" data-id="8"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Giao diện website Demo</b><div>todo</div><div class="small">10:51:29 27/7/2026</div></div></td>
-  <td>TASK008</td><td>Low</td>
-  <td><button onclick="setStatus(8,'checking')">✓</button></td>
-  <td><button onclick="setStatus(8,'done')">✔</button></td>
-  <td><button onclick="del(8)">🗑</button></td></tr><tr draggable="true" data-id="9"><td class="handle">☰</td>
-  <td><div class="badge todo"><b>📋 Giao diện admin quản lý bán hàng trên điện thoại - Số lượng kho cho bác Vân</b><div>todo</div><div class="small">10:51:46 27/7/2026</div></div></td>
-  <td>TASK009</td><td>Low</td>
-  <td><button onclick="setStatus(9,'checking')">✓</button></td>
-  <td><button onclick="setStatus(9,'done')">✔</button></td>
-  <td><button onclick="del(9)">🗑</button></td></tr></tbody>
-</table>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Checklist</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">TaskJob Workspace</p>
+        <h1>Daily Checklist</h1>
+      </div>
+      <div class="header-actions">
+        <span id="save-state" class="save-state">Đang tải dữ liệu</span>
+        <button id="theme-toggle" class="icon-button" type="button" title="Đổi giao diện" aria-label="Đổi giao diện">☾</button>
+      </div>
+    </header>
 
+    <section class="summary-grid" aria-label="Thống kê task">
+      <article class="metric-card metric-total">
+        <span>Tổng task</span>
+        <strong id="st-total">0</strong>
+      </article>
+      <article class="metric-card metric-todo">
+        <span>Chưa làm</span>
+        <strong id="st-todo">0</strong>
+      </article>
+      <article class="metric-card metric-checking">
+        <span>Đang kiểm</span>
+        <strong id="st-checking">0</strong>
+      </article>
+      <article class="metric-card metric-done">
+        <span>Hoàn tất</span>
+        <strong id="st-done">0</strong>
+      </article>
+    </section>
 
-<script id="task-data" type="application/json">[
-  {
-    "id": 1,
-    "code": "TASK001",
-    "title": "Thêm dịch vụ",
-    "priority": "High",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:50:34 27/7/2026"
-  },
-  {
-    "id": 5,
-    "code": "TASK005",
-    "title": "Resize + allign giữa màn hình cái window promt lúc in hóa đơn",
-    "priority": "Low",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:51:12 27/7/2026"
-  },
-  {
-    "id": 6,
-    "code": "TASK006",
-    "title": "Thêm phần chiết khấu + thuế phí cho đơn nhập",
-    "priority": "Low",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:51:17 27/7/2026"
-  },
-  {
-    "id": 7,
-    "code": "TASK007",
-    "title": "Thêm login nhân viên",
-    "priority": "Low",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:51:23 27/7/2026"
-  },
-  {
-    "id": 8,
-    "code": "TASK008",
-    "title": "Giao diện website Demo",
-    "priority": "Low",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:51:29 27/7/2026"
-  },
-  {
-    "id": 9,
-    "code": "TASK009",
-    "title": "Giao diện admin quản lý bán hàng trên điện thoại - Số lượng kho cho bác Vân",
-    "priority": "Low",
-    "deadline": "",
-    "status": "todo",
-    "created": "10:51:46 27/7/2026"
-  }
-]</script>
+    <section class="task-studio">
+      <form id="task-form" class="task-form" autocomplete="off">
+        <label class="field field-title" for="task-title">
+          <span>Task</span>
+          <input id="task-title" type="text" placeholder="Nhập task mới" maxlength="255">
+        </label>
+        <label class="field" for="task-priority">
+          <span>Ưu tiên</span>
+          <select id="task-priority">
+            <option value="Low">Thấp</option>
+            <option value="Medium">Trung bình</option>
+            <option value="High">Cao</option>
+          </select>
+        </label>
+        <label class="field" for="task-deadline">
+          <span>Deadline</span>
+          <input id="task-deadline" type="date">
+        </label>
+        <button class="primary-button" type="submit">
+          <span aria-hidden="true">+</span>
+          <span>Thêm</span>
+        </button>
+      </form>
 
-<script>
-let tasks=JSON.parse(document.getElementById('task-data').textContent);
-let seq=tasks.reduce((m,t)=>Math.max(m,t.id),0)+1;
+      <div class="progress-block" aria-label="Tiến độ hoàn tất">
+        <div class="progress-text">
+          <span>Tiến độ</span>
+          <strong id="progress-label">0%</strong>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+      </div>
+    </section>
 
-function toggleTheme(){document.body.classList.toggle('dark')}
-function addTask(){
- const t=title.value.trim(); if(!t)return;
- tasks.push({id:seq,code:"TASK"+String(seq).padStart(3,"0"),title:t,priority:priority.value,deadline:deadline.value,status:"todo",created:new Date().toLocaleString("vi-VN")});
- seq++; title.value=""; render();
-}
-function setStatus(id,s){tasks.find(x=>x.id==id).status=s; render();}
-function del(id){tasks=tasks.filter(x=>x.id!=id);render();}
-function cls(s){return s=="todo"?"todo":s=="checking"?"checking":"done";}
-function render(){
- const q=search.value.toLowerCase();
- const tb=document.getElementById("tb"); tb.innerHTML="";
- tasks.filter(t=>t.title.toLowerCase().includes(q)||t.code.toLowerCase().includes(q)).forEach(t=>{
-  const tr=document.createElement("tr"); tr.draggable=true; tr.dataset.id=t.id;
-  tr.innerHTML=`<td class=handle>☰</td>
-  <td><div class="badge ${cls(t.status)}"><b>📋 ${t.title}</b><div>${t.status}</div><div class=small>${t.created}${t.deadline?" • "+t.deadline:""}</div></div></td>
-  <td>${t.code}</td><td>${t.priority}</td>
-  <td><button onclick="setStatus(${t.id},'checking')">✓</button></td>
-  <td><button onclick="setStatus(${t.id},'done')">✔</button></td>
-  <td><button onclick="del(${t.id})">🗑</button></td>`;
-  addDnD(tr);
-  tb.appendChild(tr);
- });
- const total=tasks.length,todo=tasks.filter(x=>x.status=="todo").length,chk=tasks.filter(x=>x.status=="checking").length,done=tasks.filter(x=>x.status=="done").length;
- stTotal.textContent=total;stTodo.textContent=todo;stChecking.textContent=chk;stDone.textContent=done;
- bar.style.width=(total?done/total*100:0)+"%";
- document.getElementById("task-data").textContent=JSON.stringify(tasks,null,2);
-}
-function exportData(){
- const clone=document.documentElement.cloneNode(true);
- clone.querySelector("#task-data").textContent=JSON.stringify(tasks,null,2);
- clone.querySelector("#out")?.remove();
- const s="<!DOCTYPE html>\n"+clone.outerHTML;
- out.style.display="block"; out.value=s; out.select(); document.execCommand("copy");
- alert("Đã copy HTML.");
-}
-let drag;
-function addDnD(tr){
- tr.ondragstart=()=>{drag=tr;tr.classList.add("dragging")}
- tr.ondragend=()=>tr.classList.remove("dragging")
-}
-tb.ondragover=e=>{
- e.preventDefault();
- const after=[...tb.querySelectorAll("tr:not(.dragging)")].find(r=>e.clientY<r.getBoundingClientRect().top+r.offsetHeight/2);
- if(after) tb.insertBefore(drag,after); else tb.appendChild(drag);
- const ids=[...tb.children].map(r=>+r.dataset.id);
- tasks.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
- document.getElementById("task-data").textContent=JSON.stringify(tasks,null,2);
-}
-render();
-</script>
-</div>
+    <section class="tool-strip" aria-label="Công cụ task">
+      <label class="search-field" for="task-search">
+        <span>Tìm kiếm</span>
+        <input id="task-search" type="search" placeholder="Tìm task hoặc mã">
+      </label>
 
+      <div class="filters" role="group" aria-label="Lọc trạng thái">
+        <button class="filter-button is-active" type="button" data-filter="all">Tất cả</button>
+        <button class="filter-button" type="button" data-filter="todo">Chưa làm</button>
+        <button class="filter-button" type="button" data-filter="checking">Đang kiểm</button>
+        <button class="filter-button" type="button" data-filter="done">Hoàn tất</button>
+      </div>
 
-</body><en2vi-host class="corom-element" version="3" style="all: initial; position: absolute; top: 0; left: 0; right: 0; height: 0; margin: 0; text-align: left; z-index: 10000000000; pointer-events: none; border: none; display: block"></en2vi-host><savior-host style="all: unset; position: absolute; top: 0; left: 0; z-index: 99999999999999; display: block !important; overflow: unset"></savior-host></html>
+      <div class="data-actions">
+        <label class="ghost-button" for="import-file">
+          <span>Nhập data</span>
+          <input id="import-file" type="file" accept=".txt,.json,application/json">
+        </label>
+        <button id="export-data" class="ghost-button" type="button">Xuất data</button>
+        <button id="download-data" class="dark-button" type="button">Tải data.txt</button>
+      </div>
+    </section>
+
+    <section class="task-list">
+      <div class="list-header">
+        <h2>Danh sách task</h2>
+        <span id="data-source" class="data-source"></span>
+      </div>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th class="drag-column"></th>
+              <th>Tasks</th>
+              <th>Code</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="task-table">
+            <tr>
+              <td class="empty-row" colspan="6">Đang tải dữ liệu...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="export-panel" class="export-panel" hidden>
+      <div class="export-header">
+        <h2>Nội dung data.txt</h2>
+        <button id="close-export" class="icon-button" type="button" title="Đóng" aria-label="Đóng">×</button>
+      </div>
+      <textarea id="export-output" readonly spellcheck="false"></textarea>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

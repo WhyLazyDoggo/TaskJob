@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "code": "TASK001",
+    "title": "Thêm dịch vụ",
+    "priority": "High",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:50:34 27/7/2026"
+  },
+  {
+    "id": 5,
+    "code": "TASK005",
+    "title": "Resize + allign giữa màn hình cái window promt lúc in hóa đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:51:12 27/7/2026"
+  },
+  {
+    "id": 6,
+    "code": "TASK006",
+    "title": "Thêm phần chiết khấu + thuế phí cho đơn nhập",
+    "priority": "Low",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:51:17 27/7/2026"
+  },
+  {
+    "id": 7,
+    "code": "TASK007",
+    "title": "Thêm login nhân viên",
+    "priority": "Low",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:51:23 27/7/2026"
+  },
+  {
+    "id": 8,
+    "code": "TASK008",
+    "title": "Giao diện website Demo",
+    "priority": "Low",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:51:29 27/7/2026"
+  },
+  {
+    "id": 9,
+    "code": "TASK009",
+    "title": "Giao diện admin quản lý bán hàng trên điện thoại - Số lượng kho cho bác Vân",
+    "priority": "Low",
+    "deadline": "",
+    "status": "todo",
+    "created": "10:51:46 27/7/2026"
+  }
+]
