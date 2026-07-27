@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Checklist V2</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#222;--line:#ddd;--accent:#2563eb}
+body.dark{--bg:#111827;--card:#1f2937;--text:#f3f4f6;--line:#374151;--accent:#60a5fa}
+body{margin:0;font-family:Segoe UI,Arial;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:auto;padding:24px}
+.top{display:grid;grid-template-columns:1fr 140px 160px 120px 120px;gap:8px}
+input,select,button{padding:10px;border:1px solid var(--line);border-radius:8px}
+button{cursor:pointer;background:var(--accent);color:#fff}
+.stats{display:flex;gap:12px;margin:16px 0}
+.card{background:var(--card);padding:12px;border-radius:10px;border:1px solid var(--line);flex:1}
+.progress{height:10px;background:#d1d5db;border-radius:99px;overflow:hidden}
+.bar{height:100%;width:0;background:#22c55e}
+table{width:100%;border-collapse:collapse;background:var(--card)}
+th,td{border:1px solid var(--line);padding:8px;vertical-align:middle}
+tr.dragging{opacity:.5}
+.handle{cursor:grab;text-align:center;font-size:20px;width:36px}
+.badge{border-left:6px solid #999;border-radius:8px;padding:10px;min-height:72px}
+.todo{background:#eee}
+.checking{background:#fff5bf;border-color:#eab308}
+.done{background:#dcfce7;border-color:#16a34a;text-decoration:line-through}
+.small{font-size:12px;opacity:.7}
+textarea{width:100%;height:180px;margin-top:10px;display:none}
+.toolbar2{display:flex;justify-content:space-between;margin:12px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h2>Daily Checklist V2</h2>
+<div class="top">
+<input id="title" placeholder="Nhập task">
+<select id="priority"><option>Low</option><option>Medium</option><option>High</option></select>
+<input id="deadline" type="date">
+<button onclick="addTask()">Thêm</button>
+<button onclick="toggleTheme()">🌙</button>
+</div>
+<div class="toolbar2">
+<input id="search" placeholder="Tìm kiếm..." oninput="render()" style="max-width:260px">
+<button onclick="exportData()">Xuất HTML</button>
+</div>
+<div class="stats">
+<div class="card">Total <b id="stTotal">0</b></div>
+<div class="card">Todo <b id="stTodo">0</b></div>
+<div class="card">Checking <b id="stChecking">0</b></div>
+<div class="card">Done <b id="stDone">0</b></div>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<table>
+<thead><tr><th></th><th>Tasks</th><th>Code</th><th>Priority</th><th>Check</th><th>Finish</th><th>Xóa</th></tr></thead>
+<tbody id="tb"></tbody>
+</table>
+<textarea id="out"></textarea>
+
+<script id="task-data" type="application/json">[]</script>
+
+<script>
+let tasks=JSON.parse(document.getElementById('task-data').textContent);
+let seq=tasks.reduce((m,t)=>Math.max(m,t.id),0)+1;
+
+function toggleTheme(){document.body.classList.toggle('dark')}
+function addTask(){
+ const t=title.value.trim(); if(!t)return;
+ tasks.push({id:seq,code:"TASK"+String(seq).padStart(3,"0"),title:t,priority:priority.value,deadline:deadline.value,status:"todo",created:new Date().toLocaleString("vi-VN")});
+ seq++; title.value=""; render();
+}
+function setStatus(id,s){tasks.find(x=>x.id==id).status=s; render();}
+function del(id){tasks=tasks.filter(x=>x.id!=id);render();}
+function cls(s){return s=="todo"?"todo":s=="checking"?"checking":"done";}
+function render(){
+ const q=search.value.toLowerCase();
+ const tb=document.getElementById("tb"); tb.innerHTML="";
+ tasks.filter(t=>t.title.toLowerCase().includes(q)||t.code.toLowerCase().includes(q)).forEach(t=>{
+  const tr=document.createElement("tr"); tr.draggable=true; tr.dataset.id=t.id;
+  tr.innerHTML=`<td class=handle>☰</td>
+  <td><div class="badge ${cls(t.status)}"><b>📋 ${t.title}</b><div>${t.status}</div><div class=small>${t.created}${t.deadline?" • "+t.deadline:""}</div></div></td>
+  <td>${t.code}</td><td>${t.priority}</td>
+  <td><button onclick="setStatus(${t.id},'checking')">✓</button></td>
+  <td><button onclick="setStatus(${t.id},'done')">✔</button></td>
+  <td><button onclick="del(${t.id})">🗑</button></td>`;
+  addDnD(tr);
+  tb.appendChild(tr);
+ });
+ const total=tasks.length,todo=tasks.filter(x=>x.status=="todo").length,chk=tasks.filter(x=>x.status=="checking").length,done=tasks.filter(x=>x.status=="done").length;
+ stTotal.textContent=total;stTodo.textContent=todo;stChecking.textContent=chk;stDone.textContent=done;
+ bar.style.width=(total?done/total*100:0)+"%";
+ document.getElementById("task-data").textContent=JSON.stringify(tasks,null,2);
+}
+function exportData(){
+ const clone=document.documentElement.cloneNode(true);
+ clone.querySelector("#task-data").textContent=JSON.stringify(tasks,null,2);
+ clone.querySelector("#out")?.remove();
+ const s="<!DOCTYPE html>\n"+clone.outerHTML;
+ out.style.display="block"; out.value=s; out.select(); document.execCommand("copy");
+ alert("Đã copy HTML.");
+}
+let drag;
+function addDnD(tr){
+ tr.ondragstart=()=>{drag=tr;tr.classList.add("dragging")}
+ tr.ondragend=()=>tr.classList.remove("dragging")
+}
+tb.ondragover=e=>{
+ e.preventDefault();
+ const after=[...tb.querySelectorAll("tr:not(.dragging)")].find(r=>e.clientY<r.getBoundingClientRect().top+r.offsetHeight/2);
+ if(after) tb.insertBefore(drag,after); else tb.appendChild(drag);
+ const ids=[...tb.children].map(r=>+r.dataset.id);
+ tasks.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
+ document.getElementById("task-data").textContent=JSON.stringify(tasks,null,2);
+}
+render();
+</script>
+</div>
+</body>
+</html>
