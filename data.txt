@@ -68,7 +68,106 @@
     "title": "Giao diện admin quản lý bán hàng trên điện thoại - Số lượng kho cho bác Vân",
     "priority": "Low",
     "deadline": "",
-    "status": "todo",
+    "status": "checking",
     "created": "10:51:46 27/7/2026"
+  },
+  {
+    "id": 12,
+    "code": "TASK012",
+    "title": "Thêm giao diện \"Tạo đơn\" trên điện thoại",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:44:50 1/8/2026"
+  },
+  {
+    "id": 13,
+    "code": "TASK013",
+    "title": "Thêm giao diện \"Chọn sản phẩm\" khi tạo đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:01 1/8/2026"
+  },
+  {
+    "id": 14,
+    "code": "TASK014",
+    "title": "Thêm giao diện \"Quét mã QR\" trên tạo đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:12 1/8/2026"
+  },
+  {
+    "id": 15,
+    "code": "TASK015",
+    "title": "Thêm \"Thay đổi giá\" trên tạo đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:23 1/8/2026"
+  },
+  {
+    "id": 16,
+    "code": "TASK016",
+    "title": "Thêm \"Thay đổi phí ship",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:30 1/8/2026"
+  },
+  {
+    "id": 17,
+    "code": "TASK017",
+    "title": "Thêm giao diện \"CHọn khách hàng\" trên tạo đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:43 1/8/2026"
+  },
+  {
+    "id": 18,
+    "code": "TASK018",
+    "title": "Thêm \"Tạo mới khách hàng\" trên tạo đơn",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:50 1/8/2026"
+  },
+  {
+    "id": 19,
+    "code": "TASK019",
+    "title": "Tạo đơn hàng trên giao diện mobile",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:45:59 1/8/2026"
+  },
+  {
+    "id": 20,
+    "code": "TASK020",
+    "title": "Thêm giao diện \"Danh sách hóa đơn\"",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:46:08 1/8/2026"
+  },
+  {
+    "id": 21,
+    "code": "TASK021",
+    "title": "Thêm giao diện \"Xem chi tiết hóa đơn\"",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:46:14 1/8/2026"
+  },
+  {
+    "id": 22,
+    "code": "TASK022",
+    "title": "Thêm giao diện \"Gửi hóa đơn\"",
+    "priority": "Low",
+    "deadline": "",
+    "status": "checking",
+    "created": "01:46:26 1/8/2026"
   }
 ]
