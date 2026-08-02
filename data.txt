@@ -5,7 +5,7 @@
     "title": "Thêm dịch vụ",
     "priority": "High",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "10:50:34 27/7/2026"
   },
   {
@@ -14,7 +14,7 @@
     "title": "Thêm \"Đơn tổng\" cho nhập khách mua lẻ nhanh gọn nhẹ",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "16:05:33 27/7/2026"
   },
   {
@@ -23,7 +23,7 @@
     "title": "Resize + allign giữa màn hình cái window promt lúc in hóa đơn",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "10:51:12 27/7/2026"
   },
   {
@@ -32,7 +32,7 @@
     "title": "Thêm phần chiết khấu + thuế phí cho đơn nhập",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "10:51:17 27/7/2026"
   },
   {
@@ -77,7 +77,7 @@
     "title": "Thêm giao diện \"Tạo đơn\" trên điện thoại",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "01:44:50 1/8/2026"
   },
   {
@@ -86,7 +86,7 @@
     "title": "Thêm giao diện \"Chọn sản phẩm\" khi tạo đơn",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "01:45:01 1/8/2026"
   },
   {
@@ -104,7 +104,7 @@
     "title": "Thêm \"Thay đổi giá\" trên tạo đơn",
     "priority": "Low",
     "deadline": "",
-    "status": "checking",
+    "status": "done",
     "created": "01:45:23 1/8/2026"
   },
   {
